@@ -1,3 +1,4 @@
+#!/bin/bash
 DEB_DOWNLOAD="https://repo.zabbix.com/zabbix/6.2/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.2-4%2Bubuntu22.04_all.deb"
 AGENT_CONFIG="/etc/zabbix/zabbix_agent2.conf"
 PSKNAME=""
@@ -23,7 +24,9 @@ dpkg -i /tmp/zabbix.deb
 rm -f /tmp/zabbix.deb
 
 apt update
-apt install -y zabbix-agent2 zabbix-agent2-plugin-*
+apt install -y openssl zabbix-agent2 zabbix-agent2-plugin-*
+
+openssl rand -hex 32 > ${AGENT_CONFIG}.psk
 
 sed -i "s/^Server=.*$/Server=${ZABBIX_SERVER}/" $AGENT_CONFIG
 sed -i "s/^ServerActive=.*$/ServerActive=${ZABBIX_SERVER}/" $AGENT_CONFIG
